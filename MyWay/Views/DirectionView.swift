@@ -24,7 +24,7 @@ struct DirectionView: View {
             Image("arrow")
                 .resizable()
                 .frame(width: 333, height: 333)
-                .rotationEffect(.degrees(locationManager.headingDegrees))
+                .rotationEffect(.degrees(locationManager.headingToTgt))
             Spacer()
         }
         .padding()

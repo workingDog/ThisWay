@@ -20,7 +20,8 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
     
     var degrees: CGFloat = .zero
     var headingDegrees: CGFloat = .zero
-    var destAngle: CGFloat = .zero
+    var bearingToTarget: CGFloat = .zero
+    var headingToTgt: CGFloat = .zero
     
     let errorMargin: CLLocationDegrees = 5.0
     
@@ -69,11 +70,9 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations.last
-        
-        guard let currentLocation = location else { return }
-        guard let tgt = tgtLocation else { return }
-        
-        destAngle = currentLocation.bearingToLocationDegrees(destinationLocation: tgt)
+        guard let current = location, let target = tgtLocation else { return }
+        bearingToTarget = current.bearingToLocationDegrees(destinationLocation: target)
+        updateHeadingToTgt()
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -82,6 +81,18 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         headingDegrees = newHeading.trueHeading
+        updateHeadingToTgt()
+    }
+    
+    private func updateHeadingToTgt() {
+        headingToTgt = normalizedAngle(bearingToTarget - headingDegrees)
+    }
+    
+    func normalizedAngle(_ angle: CGFloat) -> CGFloat {
+        var a = angle.truncatingRemainder(dividingBy: 360)
+        if a > 180 { a -= 360 }
+        if a < -180 { a += 360 }
+        return a
     }
     
 }
