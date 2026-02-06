@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C7070B322F35D89A009C843E /* OSRMSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C7070B312F35D89A009C843E /* OSRMSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		C71E4A9C2F358562000B6C0F /* ThisWay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThisWay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,16 +40,25 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7070B322F35D89A009C843E /* OSRMSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C7070B302F35D89A009C843E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C71E4A932F358562000B6C0F = {
 			isa = PBXGroup;
 			children = (
 				C71E4A9E2F358562000B6C0F /* ThisWay */,
+				C7070B302F35D89A009C843E /* Frameworks */,
 				C71E4A9D2F358562000B6C0F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -78,6 +91,7 @@
 			);
 			name = ThisWay;
 			packageProductDependencies = (
+				C7070B312F35D89A009C843E /* OSRMSwift */,
 			);
 			productName = Directus;
 			productReference = C71E4A9C2F358562000B6C0F /* ThisWay.app */;
@@ -107,6 +121,9 @@
 			);
 			mainGroup = C71E4A932F358562000B6C0F;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C724A5A02F35D7BA00130699 /* XCRemoteSwiftPackageReference "OSRMSwift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C71E4A9D2F358562000B6C0F /* Products */;
 			projectDirPath = "";
@@ -357,6 +374,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C724A5A02F35D7BA00130699 /* XCRemoteSwiftPackageReference "OSRMSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/workingDog/OSRMSwift";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C7070B312F35D89A009C843E /* OSRMSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C724A5A02F35D7BA00130699 /* XCRemoteSwiftPackageReference "OSRMSwift" */;
+			productName = OSRMSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C71E4A942F358562000B6C0F /* Project object */;
 }

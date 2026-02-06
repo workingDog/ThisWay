@@ -9,7 +9,6 @@ import MapKit
 import CoreLocation
 
 
-
 struct ContentView: View {
     
     @State private var locationManager = LocationManager()
@@ -65,7 +64,8 @@ struct ContentView: View {
         .environment(locationManager)
         .task {
             locationManager.requestPermissionAndLocation()
-            query = "Bunkamura Orchard Hall Shinjuku"
+          //  query = "Bunkamura Orchard Hall Shinjuku"
+            query = "Tokyo station"
         }
     }
 }
