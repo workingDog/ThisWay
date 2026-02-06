@@ -16,12 +16,21 @@ struct DirectionView: View {
 
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading) {
             Text(place.item.name ?? "Unknown place").font(.headline)
-            Text(place.item.address?.shortAddress ?? "unknown")
+            Text(place.item.address?.shortAddress ?? "unknown").padding(.bottom, 12)
             Text(locationManager.location?.distanceStringTo(place.item.location) ?? "")
+            Spacer()
+            Image("arrow")
+                .resizable()
+                .frame(width: 333, height: 333)
+                .rotationEffect(.degrees(locationManager.headingDegrees))
+            Spacer()
         }
         .padding()
+        .task {
+            locationManager.tgtLocation = place.item.location
+        }
     }
 }
 

@@ -65,6 +65,7 @@ struct ContentView: View {
         .environment(locationManager)
         .task {
             locationManager.requestPermissionAndLocation()
+            query = "Bunkamura Orchard Hall Shinjuku"
         }
     }
 }

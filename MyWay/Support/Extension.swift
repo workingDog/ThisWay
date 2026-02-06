@@ -10,6 +10,7 @@ import CoreLocation
 
 
 public extension CLLocation {
+    
     func bearingToLocationRadian(_ destinationLocation: CLLocation) -> CGFloat {
         
         let lat1 = self.coordinate.latitude.degreesToRadians
@@ -34,9 +35,9 @@ public extension CLLocation {
     func distanceStringTo(_ other: CLLocation) -> String? {
         let meters = self.distance(from: other)
         if meters < 1_000 {
-            return "\(Int(meters)) m away"
+            return "\(Int(meters)) m "
         } else {
-            return String(format: "%.1f km away", meters / 1_000)
+            return String(format: "%.1f km ", meters / 1_000)
         }
     }
     

@@ -8,12 +8,21 @@ import SwiftUI
 import Foundation
 import CoreLocation
 
-
+/*
 @Observable class CompassHeading: NSObject, CLLocationManagerDelegate {
 
     var degrees: Double = .zero
+    var headingDegrees: Double = .zero
+    var destAngle: CLLocationDegrees = .zero
     
-    private let locationManager: CLLocationManager
+    let errorMargin: CLLocationDegrees = 5.0
+    let locationManager: LocationManager
+    
+    var isHeadingToTarget: Bool {
+        let lowerBound = destAngle - errorMargin
+        let upperBound = destAngle + errorMargin
+        return headingDegrees >= lowerBound && headingDegrees <= upperBound
+    }
     
     override init() {
         self.locationManager = CLLocationManager()
@@ -35,5 +44,9 @@ import CoreLocation
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         self.degrees = -1 * newHeading.magneticHeading
     }
+    
+    
+    
 }
 
+*/
