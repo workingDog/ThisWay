@@ -31,7 +31,7 @@ struct DirectionView: View {
                             .stroke(.blue, lineWidth: 8)
                         if let start = route.geometry.coordinates2D.first,
                            let end = route.geometry.coordinates2D.last{
-                            Marker("Start", coordinate: start)
+                       //     Marker("Start", coordinate: start)
                             Marker("End", coordinate: end)
                         }
                     }
@@ -40,7 +40,7 @@ struct DirectionView: View {
             
             Image("arrow")
                 .resizable()
-                .frame(width: 333, height: 333)
+                .frame(width: 100, height: 100)
                 .rotationEffect(.degrees(locationManager.headingToTgt))
             
         }
