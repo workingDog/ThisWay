@@ -62,6 +62,7 @@ struct ContentView: View {
                 }
             }
         }
+        .environment(locationManager)
         .task {
             locationManager.requestPermissionAndLocation()
         }
@@ -74,22 +75,10 @@ struct PlaceRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(item.name ?? "Unknown place")
-                .font(.headline)
-
-            if let distanceString {
-                Text(distanceString)
-            }
+            Text(item.name ?? "Unknown place").font(.headline)
+            Text(userLocation.distanceStringTo(item.location) ?? "")
         }
         .padding(.vertical, 4)
     }
 
-    private var distanceString: String? {
-        let meters = userLocation.distance(from: item.location)
-        if meters < 1_000 {
-            return "\(Int(meters)) m away"
-        } else {
-            return String(format: "%.1f km away", meters / 1_000)
-        }
-    }
 }
