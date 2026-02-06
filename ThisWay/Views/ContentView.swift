@@ -36,7 +36,7 @@ struct ContentView: View {
                 DirectionView(place: place)
             }
             .navigationTitle("Search places")
-            .searchable(text: $query, prompt: "Search Apple Maps")
+            .searchable(text: $query, prompt: "Search for a place")
             .onChange(of: query) {
                 searchTask?.cancel()
                 

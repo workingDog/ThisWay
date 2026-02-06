@@ -29,9 +29,7 @@ struct DirectionView: View {
                     ForEach(response.routes) { route in
                         MapPolyline(coordinates: route.geometry.coordinates2D)
                             .stroke(.blue, lineWidth: 8)
-                        if let start = route.geometry.coordinates2D.first,
-                           let end = route.geometry.coordinates2D.last{
-                       //     Marker("Start", coordinate: start)
+                        if let end = route.geometry.coordinates2D.last{
                             Marker("End", coordinate: end)
                         }
                     }
