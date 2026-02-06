@@ -1,6 +1,6 @@
 //
 //  Place.swift
-//  Directus
+//  MyWay
 //
 //  Created by Ringo Wathelet on 2026/02/06.
 //
