@@ -1,5 +1,5 @@
 //
-//  MyWayApp.swift
+//  ThisWayApp.swift
 //  MyWay
 //
 //  Created by Ringo Wathelet on 2026/02/06.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct MyWayApp: App {
+struct ThisWayApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
