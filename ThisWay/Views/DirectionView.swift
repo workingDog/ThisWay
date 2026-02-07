@@ -75,10 +75,3 @@ struct DirectionView: View {
     }
     
 }
-
-
-//            Text(place.item.name ?? "Unknown place").font(.headline)
-//            Text(place.item.address?.shortAddress ?? "unknown").padding(.bottom, 12)
-//            Text(locationManager.locator.location?.distanceStringTo(place.item.location) ?? "")
-
-//}
