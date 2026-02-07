@@ -18,7 +18,7 @@ final class RouteManager {
     
     var tgtLocation: CLLocation?
     var route = MKRoute()
-    var arrows: [RouteArrow] = []
+    var routeBearing: CLLocationDegrees = .zero
     
     init() { }
     
@@ -63,7 +63,7 @@ final class RouteManager {
         
         var bearing = atan2(y, x) * 180 / .pi
         bearing = (bearing + 360).truncatingRemainder(dividingBy: 360)
-        
+
         return bearing
     }
     
@@ -81,18 +81,60 @@ final class RouteManager {
         return bearing(from: start, to: next)
     }
     
-    @MainActor
-    func buildArrows() {
-        arrows = route.steps.compactMap { step in
-            let polyline = step.polyline
-            guard polyline.pointCount >= 2 else { return nil }
-            
-            let points = polyline.points()
-            let startCoord = points[0].coordinate
-            
-            let bearing = bearing(from: startCoord, to: points[1].coordinate)
-            
-            return RouteArrow(coordinate: startCoord, bearing: bearing)
+    func closestSegmentIndex(to location: CLLocationCoordinate2D, in polyline: MKPolyline) -> Int? {
+
+        let userPoint = MKMapPoint(location)
+        let points = polyline.points()
+
+        var closestIndex: Int?
+        var minDistance = CLLocationDistance.greatestFiniteMagnitude
+
+        for i in 0..<(polyline.pointCount - 1) {
+            let p1 = points[i]
+            let p2 = points[i + 1]
+
+            let distance = distanceFromPoint(userPoint, toSegmentBetween: p1,and: p2)
+
+            if distance < minDistance {
+                minDistance = distance
+                closestIndex = i
+            }
+        }
+
+        return closestIndex
+    }
+    
+    func distanceFromPoint(_ p: MKMapPoint, toSegmentBetween v: MKMapPoint, and w: MKMapPoint) -> CLLocationDistance {
+
+        let l2 = v.distance(to: w)
+        if l2 == 0 { return p.distance(to: v) }
+
+        let t = max(0, min(1,
+            ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) /
+            ((w.x - v.x) * (w.x - v.x) + (w.y - v.y) * (w.y - v.y))
+        ))
+
+        let projection = MKMapPoint(
+            x: v.x + t * (w.x - v.x),
+            y: v.y + t * (w.y - v.y)
+        )
+
+        return p.distance(to: projection)
+    }
+ 
+    func updateRouteBearing() {
+        if let userLoc = locator.location {
+            guard let index = closestSegmentIndex(
+                to: userLoc.coordinate,
+                in: route.polyline
+            ) else { return }
+ 
+            let points = route.polyline.points()
+            let start = points[index].coordinate
+            let aheadIndex = min(index + 5, route.polyline.pointCount - 1)
+            let end = points[aheadIndex].coordinate
+
+            routeBearing = bearing(from: start, to: end)
         }
     }
     
@@ -113,9 +155,8 @@ final class RouteManager {
             directions.calculate { response, error in
                 guard let route = response?.routes.first else { return }
                 self.route = route
+                self.updateRouteBearing()
             }
-            
-            buildArrows()
         }
     }
     
