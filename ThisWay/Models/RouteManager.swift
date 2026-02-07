@@ -140,4 +140,11 @@ final class RouteManager {
         remainingDistance = remaining
     }
     
+    static func asString(_ dist: Double) -> String {
+        if dist < 1_000 {
+            return "\(Int(dist)) m "
+        } else {
+            return String(format: "%.1f km ", dist / 1_000)
+        }
+    }
 }

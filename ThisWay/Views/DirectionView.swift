@@ -15,12 +15,11 @@ struct DirectionView: View {
     let place: Place
     
     @State private var cameraPosition: MapCameraPosition = .automatic
-    
     @State private var lastCameraLocation: CLLocation?
     
     var body: some View {
         
-        Text("\(router.remainingDistance.asStringDistance())")
+        Text(RouteManager.asString(router.remainingDistance))
         
         Map(position: $cameraPosition) {
             MapPolyline(router.route.polyline).stroke(.blue, lineWidth: 4)
@@ -52,7 +51,7 @@ struct DirectionView: View {
     }
     
     func updateCameraHeading() {
-        guard let userLocation = router.locator.location else { return }
+        guard let userLocation = router.location() else { return }
 
         let camera = MapCamera(
             centerCoordinate: userLocation.coordinate,

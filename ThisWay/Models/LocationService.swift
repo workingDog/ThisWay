@@ -71,6 +71,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        // direction the iPhone is pointing, in degrees, relative to true north.
         headingDegrees = newHeading.trueHeading
     }
     

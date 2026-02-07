@@ -85,7 +85,8 @@ struct PlaceRow: View {
 
     func crowDistance() -> String {
         if let userPos = router.location() {
-            return userPos.distance(from: item.location).asStringDistance()
+            let dist = userPos.distance(from: item.location)
+            return RouteManager.asString(dist)
         }
         return ""
     }
