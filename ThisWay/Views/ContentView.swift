@@ -25,7 +25,7 @@ struct ContentView: View {
                 if router.location() != nil {
                     List(searcher.places) { place in
                         PlaceRow(item: place.item)
-                            .contentShape(Rectangle()) // makes whole row tappable
+                            .contentShape(Rectangle()) 
                             .onTapGesture {
                                 selectedPlace = place
                             }
@@ -39,12 +39,9 @@ struct ContentView: View {
             .searchable(text: $query, prompt: "Search for a place")
             .onChange(of: query) {
                 searchTask?.cancel()
-                
                 searchTask = Task {
                     try? await Task.sleep(for: .milliseconds(350))
-                    
                     let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
-                    
                     guard
                         trimmed.count >= 3,
                         let userLocation = router.location()
@@ -52,7 +49,6 @@ struct ContentView: View {
                         searcher.places = []
                         return
                     }
-                    
                     do {
                         try await searcher.searchPlaces(query: trimmed, near: userLocation)
                     } catch {
@@ -78,6 +74,7 @@ struct PlaceRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(item.name ?? "Unknown place").font(.headline)
+            Text(item.address?.shortAddress ?? "")
             Text(crowDistance())
         }
         .padding(.vertical, 4)
