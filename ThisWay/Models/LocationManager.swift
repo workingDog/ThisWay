@@ -33,7 +33,8 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
         super.init()
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.headingFilter = 1
+        manager.headingFilter = kCLHeadingFilterNone
+        manager.headingOrientation = .portrait
     }
     
     func requestPermissionAndLocation() {
@@ -47,21 +48,20 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
             manager.requestLocation()
             
         case .denied, .restricted:
-            //   error = LocationError.permissionDenied
-            print(".denied, .restricted")
+            print(".denied, .restricted  permissionDenied")
             
-        @unknown default:  break
+        @unknown default: break
         }
     }
-
+    
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         authorizationStatus = manager.authorizationStatus
-
+        
         if authorizationStatus == .authorizedWhenInUse ||
-           authorizationStatus == .authorizedAlways {
-
+            authorizationStatus == .authorizedAlways {
+            
             manager.requestLocation()
-
+            
             if CLLocationManager.headingAvailable() {
                 manager.startUpdatingHeading()
             }
@@ -94,5 +94,50 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
         if a < -180 { a += 360 }
         return a
     }
+    
+    func bearingFromUser(to end: CLLocationCoordinate2D) -> CLLocationDegrees {
+        if let userCoord = location?.coordinate {
+            let lat1 = degreesToRadians(degrees: userCoord.latitude)
+            let lon1 = degreesToRadians(degrees: userCoord.longitude)
+            
+            let lat2 = degreesToRadians(degrees: end.latitude)
+            let lon2 = degreesToRadians(degrees: end.longitude)
+            
+            let dLon = lon2 - lon1
+            
+            let y = sin(dLon) * cos(lat2)
+            let x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon)
+            
+            var bearing = atan2(y, x) * 180 / .pi
+            bearing = (bearing + 360).truncatingRemainder(dividingBy: 360)
+            
+            return bearing
+        }
+        
+        return .zero
+    }
+    
+    func bearing(from start: CLLocationCoordinate2D, to end: CLLocationCoordinate2D) -> CLLocationDegrees {
+        
+        let lat1 = degreesToRadians(degrees: start.latitude)
+        let lon1 = degreesToRadians(degrees: start.longitude)
+        
+        let lat2 = degreesToRadians(degrees: end.latitude)
+        let lon2 = degreesToRadians(degrees: end.longitude)
+        
+        let dLon = lon2 - lon1
+        
+        let y = sin(dLon) * cos(lat2)
+        let x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon)
+        
+        var bearing = atan2(y, x) * 180 / .pi
+        bearing = (bearing + 360).truncatingRemainder(dividingBy: 360)
+        
+        return bearing
+    }
+    
+    func degreesToRadians(degrees: Double) -> Double { return degrees * .pi / Double(180) }
+    
+    func radiansToDegrees(radians: Double) -> Double { return radians * Double(180) / .pi }
     
 }

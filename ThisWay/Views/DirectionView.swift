@@ -15,12 +15,11 @@ struct DirectionView: View {
     
     let place: Place
     
+    @State private var steps: [OSRMStep] = []
+    @State private var routeBearing = 0.0
     @State private var osrm = OSRMDataModel()
     
-    @State private var cameraPosition: MapCameraPosition = .region(MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 35.68365805925461, longitude: 139.78335278819443),
-        span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
-    ))
+    @State private var cameraPosition: MapCameraPosition = .automatic
     
     var body: some View {
         ZStack {
@@ -35,12 +34,11 @@ struct DirectionView: View {
                     }
                 }
             }
-            
+
             Image("arrow")
                 .resizable()
                 .frame(width: 100, height: 100)
-                .rotationEffect(.degrees(locationManager.headingToTgt))
-            
+                .rotationEffect(.degrees(routeBearing - locationManager.headingDegrees))
         }
         .task {
             locationManager.tgtLocation = place.item.location
@@ -50,18 +48,13 @@ struct DirectionView: View {
             
             print("---> start: \(start)")
             print("---> tgt: \(tgt)")
-            
-            cameraPosition = .region(MKCoordinateRegion(
-                center: CLLocationCoordinate2D(latitude: start.latitude, longitude: start.longitude),
-                span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-            ))
-            
+
             let request = OSRMRequest(
                 profile: .driving,
                 coordinates: [
                     OSRMCoordinate(lat: start.latitude, lon: start.longitude,
                                    bearing: OSRMBearing(value: 90, range: 20),
-                                   radius: 10000),
+                                   radius: 20000),
                     OSRMCoordinate(lat: tgt.latitude, lon: tgt.longitude)
                 ],
                 service: .route,
@@ -74,9 +67,28 @@ struct DirectionView: View {
             )
             
             await osrm.getOSRMResponse(for: request)
+            
+            if let response = osrm.routeResponse, let route = response.routes.first {
+             //   print("---> route: \(route)")
+             //   print("---> legs: \(route.legs)")
+                if let leg = route.legs.first {
+             //       print("---> steps: \(leg.steps)")
+                    steps = leg.steps
+                    
+                    if let stepLoc = steps.first?.maneuver.location {
+                        let stepCoord = CLLocationCoordinate2D(
+                            latitude: stepLoc[1],
+                            longitude: stepLoc[0]
+                        )
+                        routeBearing = locationManager.bearingFromUser(to: stepCoord)
+                    }
+                }
+
+            }
         }
     }
 }
+
 
 
 struct DirectionView2: View {

@@ -8,26 +8,23 @@ import Foundation
 import CoreLocation
 
 
-struct LocationUtils {
+//    @State private var cameraPosition: MapCameraPosition = .region(MKCoordinateRegion(
+//        center: CLLocationCoordinate2D(latitude: 35.68365805925461, longitude: 139.78335278819443),
+//        span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
+//    ))
     
-    static func getRadiansBearingBetweenTwoPoints(point1 : CLLocationCoordinate2D, point2 : CLLocationCoordinate2D) -> Double {
-        let lat1 = degreesToRadians(degrees: point1.latitude)
-        let lon1 = degreesToRadians(degrees: point1.longitude)
-        
-        let lat2 = degreesToRadians(degrees: point2.latitude)
-        let lon2 = degreesToRadians(degrees: point2.longitude)
-        
-        let dLon = lon2 - lon1
-        
-        let y = sin(dLon) * cos(lat2)
-        let x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon)
-        let radiansBearing = atan2(y, x)
-        
-        return radiansBearing
-    }
-    
-    static func degreesToRadians(degrees: Double) -> Double { return degrees * .pi / Double(180) }
-    static func radiansToDegrees(radians: Double) -> Double { return radians * Double(180) / .pi }
-}
+
+//            .onMapCameraChange { context in
+//                let camera = context.camera
+//                print("--> map heading:", camera.heading)
+//                heading = (bearingAfter - camera.heading)
+//                print("---> heading: \(heading)")
+//            }
+            
+
+/*
+ // if rotating the map
+ arrowRotation = bearingAfter - phoneHeading + mapHeading
+ */
 
 
