@@ -22,3 +22,10 @@ struct Place: Identifiable, Hashable {
         self.item = item
     }
 }
+
+struct RouteArrow: Identifiable {
+    let id = UUID()
+    
+    let coordinate: CLLocationCoordinate2D
+    let bearing: CLLocationDegrees
+}

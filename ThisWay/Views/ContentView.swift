@@ -11,7 +11,7 @@ import CoreLocation
 
 struct ContentView: View {
     
-    @State private var locationManager = LocationManager()
+    @State private var router = RouteManager()
     @State private var searcher = SearchManager()
     
     @State private var query = ""
@@ -22,7 +22,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if let userLocation = locationManager.location {
+                if let userLocation = router.location() {
                     List(searcher.places) { place in
                         PlaceRow(item: place.item, userLocation: userLocation)
                             .contentShape(Rectangle()) // makes whole row tappable
@@ -47,7 +47,7 @@ struct ContentView: View {
                     
                     guard
                         trimmed.count >= 3,
-                        let userLocation = locationManager.location
+                        let userLocation = router.location()
                     else {
                         searcher.places = []
                         return
@@ -61,9 +61,9 @@ struct ContentView: View {
                 }
             }
         }
-        .environment(locationManager)
+        .environment(router)
         .task {
-            locationManager.requestPermissionAndLocation()
+            router.locator.requestPermissionAndLocation()
           //  query = "Bunkamura Orchard Hall Shinjuku"
             query = "Tokyo station"
         }
