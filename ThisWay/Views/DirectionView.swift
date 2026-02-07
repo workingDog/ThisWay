@@ -16,6 +16,8 @@ struct DirectionView: View {
     
     @State private var cameraPosition: MapCameraPosition = .automatic
     
+    @State private var lastCameraLocation: CLLocation?
+    
     var body: some View {
         
         Text("\(router.remainingDistance.asStringDistance())")
@@ -30,22 +32,49 @@ struct DirectionView: View {
                         .rotationEffect(
                             .degrees(router.routeBearing - router.locator.headingDegrees)
                         )
-                     //   .rotationEffect(.degrees(0))
                 }
             }
         }
-        // if rotating the map arrowRotation = bearingAfter - phoneHeading + mapHeading
-        
+        .onChange(of: router.routeBearing) {
+            updateCameraHeading()
+        }
         .onChange(of: router.locator.location) {
             router.updateRoute()
+            if let userPos = router.location() {
+                handleLocationUpdate(userPos)
+            }
         }
         .task {
-            cameraPosition = .userLocation(followsHeading: false, fallback: .automatic)
-            
             router.tgtLocation = place.item.location
             router.getRoute()
+            updateCameraHeading()
         }
     }
+    
+    func updateCameraHeading() {
+        guard let userLocation = router.locator.location else { return }
+
+        let camera = MapCamera(
+            centerCoordinate: userLocation.coordinate,
+            distance: 1000,              // walking zoom
+            heading: router.routeBearing,
+            pitch: 0
+        )
+
+        cameraPosition = .camera(camera)
+    }
+    
+    func handleLocationUpdate(_ location: CLLocation) {
+        if let last = lastCameraLocation {
+            let distance = location.distance(from: last)
+            guard distance >= 8 else {
+                return
+            }
+        }
+        lastCameraLocation = location
+        updateCameraHeading()
+    }
+    
 }
 
 
