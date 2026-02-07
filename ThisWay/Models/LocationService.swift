@@ -16,6 +16,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     
     private let manager = CLLocationManager()
     
+    // user location
     var location: CLLocation?
     var headingDegrees: CGFloat = .zero
 

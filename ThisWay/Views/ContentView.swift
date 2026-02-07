@@ -22,9 +22,9 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if let userLocation = router.location() {
+                if router.location() != nil {
                     List(searcher.places) { place in
-                        PlaceRow(item: place.item, userLocation: userLocation)
+                        PlaceRow(item: place.item)
                             .contentShape(Rectangle()) // makes whole row tappable
                             .onTapGesture {
                                 selectedPlace = place
@@ -71,15 +71,22 @@ struct ContentView: View {
 }
 
 struct PlaceRow: View {
+    @Environment(RouteManager.self) var router
+    
     let item: MKMapItem
-    let userLocation: CLLocation
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(item.name ?? "Unknown place").font(.headline)
-            Text(userLocation.distanceStringTo(item.location) ?? "")
+            Text(crowDistance())
         }
         .padding(.vertical, 4)
     }
-    
+
+    func crowDistance() -> String {
+        if let userPos = router.location() {
+            return userPos.distance(from: item.location).asStringDistance()
+        }
+        return ""
+    }
 }
