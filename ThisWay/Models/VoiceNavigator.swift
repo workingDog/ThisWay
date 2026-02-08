@@ -61,8 +61,8 @@ final class VoiceNavigator {
         let absAngle = abs(angleError)
         return switch absAngle {
             case ...straightThreshold: .keepStraight
-            case ...slightTurnThreshold:  angleError > 0 ? .slightRight : .slightLeft
-            default:  angleError > 0 ? .right : .left
+            case ...slightTurnThreshold: angleError > 0 ? .slightRight : .slightLeft
+            default: angleError > 0 ? .right : .left
         }
     }
 

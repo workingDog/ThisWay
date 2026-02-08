@@ -47,12 +47,12 @@ struct DirectionView: View {
         .onChange(of: router.locator.headingDegrees) {
             guard let last = lastNavHeading else {
                 lastNavHeading = router.locator.headingDegrees
-                updateNavigation()
+                updateVoiceNavi()
                 return
             }
             if angleDelta(router.locator.headingDegrees, last) >= 15 {
                 lastNavHeading = router.locator.headingDegrees
-                updateNavigation()
+                updateVoiceNavi()
             }
         }
         .onChange(of: router.locator.location) {
@@ -63,7 +63,7 @@ struct DirectionView: View {
                 if let last = lastCameraLocation {
                     let distance = userPos.distance(from: last)
                     if distance >= 8 {
-                        updateNavigation()
+                        updateVoiceNavi()
                     }
                 }
             }
@@ -111,7 +111,7 @@ struct DirectionView: View {
         return Double.greatestFiniteMagnitude
     }
     
-    func updateNavigation() {
+    func updateVoiceNavi() {
         if speechOn {
             voiceNav.updateNavigation(angle: (router.routeBearing - router.locator.headingDegrees), distance: crowDistance())
         }
