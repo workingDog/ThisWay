@@ -3,6 +3,8 @@
 
 A simple map app with a big arrow that points the way and a quick place search.
 
+Set the **Voice directions** on, to hear the direction instructions.
+
 For iPhone, iOS-26+
 
 
