@@ -15,7 +15,7 @@ struct DirectionView: View {
     let place: Place
     
     @State private var speechOn: Bool = false
-    @State private var navProcessor = NavigationProcessor()
+    @State private var voiceNav = VoiceNavigator()
     @State private var lastNavHeading: Double?
     
     @State private var cameraPosition: MapCameraPosition = .automatic
@@ -113,7 +113,7 @@ struct DirectionView: View {
     
     func updateNavigation() {
         if speechOn {
-            navProcessor.updateNavigation(angle: (router.routeBearing - router.locator.headingDegrees), distance: crowDistance())
+            voiceNav.updateNavigation(angle: (router.routeBearing - router.locator.headingDegrees), distance: crowDistance())
         }
     }
     

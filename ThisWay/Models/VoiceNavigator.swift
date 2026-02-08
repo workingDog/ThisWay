@@ -1,5 +1,5 @@
 //
-//  NavigationProcessor.swift
+//  VoiceNavigator.swift
 //  ThisWay
 //
 //  Created by Ringo Wathelet on 2026/02/08.
@@ -11,7 +11,7 @@ import SwiftUI
 
 @Observable
 @MainActor
-final class NavigationProcessor {
+final class VoiceNavigator {
 
     let speechManager = SpeechManager()
     
