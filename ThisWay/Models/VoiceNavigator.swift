@@ -26,7 +26,7 @@ final class VoiceNavigator {
     
     
     func updateNavigation(angle: Double, distance: Double) {
-        let angleNorm = normalizeAngle(angle)
+        let angleNorm = normalizeAngle( -angle )
         if let lastAngle, abs(angleNorm - lastAngle) < 10 {
             return
         }
@@ -37,13 +37,12 @@ final class VoiceNavigator {
     }
 
     private func nextInstruction(angle: Double, distance: Double) -> Instruction? {
-        let angleError = normalizeAngle(angle)
         // Distance always wins near the destination
         if let distanceInstruction = distanceInstruction(for: distance) {
             return commit(distanceInstruction)
         }
         // Direction guidance
-        if let directionInstruction = directionInstruction(for: angleError) {
+        if let directionInstruction = directionInstruction(for: angle) {
             return commit(directionInstruction)
         }
         return nil
