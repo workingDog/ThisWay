@@ -50,7 +50,7 @@ struct DirectionView: View {
                 updateNavigation()
                 return
             }
-            if angleDelta(router.locator.headingDegrees, last) >= 10 {
+            if angleDelta(router.locator.headingDegrees, last) >= 15 {
                 lastNavHeading = router.locator.headingDegrees
                 updateNavigation()
             }
