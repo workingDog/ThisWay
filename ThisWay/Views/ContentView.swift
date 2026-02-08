@@ -43,7 +43,7 @@ struct ContentView: View {
                     try? await Task.sleep(for: .milliseconds(350))
                     let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
                     guard
-                        trimmed.count >= 3,
+                        trimmed.count > 3,
                         let userLocation = router.location()
                     else {
                         searcher.places = []
