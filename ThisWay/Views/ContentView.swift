@@ -25,7 +25,7 @@ struct ContentView: View {
                 if router.location() != nil {
                     List(searcher.places) { place in
                         PlaceRow(item: place.item)
-                            .contentShape(Rectangle()) 
+                            .contentShape(Rectangle())
                             .onTapGesture {
                                 selectedPlace = place
                             }
@@ -49,11 +49,7 @@ struct ContentView: View {
                         searcher.places = []
                         return
                     }
-                    do {
-                        try await searcher.searchPlaces(query: trimmed, near: userLocation)
-                    } catch {
-                        print("Search error:", error)
-                    }
+                    searcher.update(query: trimmed, near: userLocation)
                 }
             }
         }
@@ -73,12 +69,12 @@ struct PlaceRow: View {
     let item: MKMapItem
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 5) {
             Text(item.name ?? "Unknown place").font(.headline)
             Text(item.address?.shortAddress ?? "")
             Text(crowDistance())
         }
-        .padding(.vertical, 4)
+        .padding(5)
     }
 
     func crowDistance() -> String {

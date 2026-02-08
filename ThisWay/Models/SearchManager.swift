@@ -10,23 +10,57 @@ import Foundation
 
 
 @MainActor
-@Observable class SearchManager {
+@Observable
+final class SearchManager: NSObject, MKLocalSearchCompleterDelegate {
     
     var places: [Place] = []
     
-    func searchPlaces(query: String, near location: CLLocation) async throws {
-        let request = MKLocalSearch.Request()
-        request.naturalLanguageQuery = query
-
-        request.region = MKCoordinateRegion(
+    private let completer = MKLocalSearchCompleter()
+    private var resolveTask: Task<Void, Never>?
+    
+    override init() {
+        super.init()
+        completer.delegate = self
+        completer.resultTypes = [.address, .pointOfInterest]
+    }
+    
+    func update(query: String, near location: CLLocation) {
+        completer.region = MKCoordinateRegion(
             center: location.coordinate,
-            latitudinalMeters: 20_000,
-            longitudinalMeters: 20_000
+            latitudinalMeters: 40_000,
+            longitudinalMeters: 40_000
         )
-
-        let search = MKLocalSearch(request: request)
-        let response = try await search.start()
-        places = response.mapItems.map { Place(item: $0) }
+        completer.queryFragment = query
+    }
+    
+    private func resolveCompletions(_ completions: [MKLocalSearchCompletion]) {
+        resolveTask?.cancel()
+        
+        resolveTask = Task {
+            var resolved: [Place] = []
+            
+            for completion in completions.prefix(10) {
+                if Task.isCancelled { return }
+                
+                do {
+                    let request = MKLocalSearch.Request(completion: completion)
+                    let response = try await MKLocalSearch(request: request).start()
+                    resolved.append(contentsOf: response.mapItems.map { Place(item: $0) })
+                } catch {
+                    continue
+                }
+            }
+            
+            places = resolved
+        }
+    }
+    
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        resolveCompletions(completer.results)
+    }
+    
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        places = []
     }
     
 }
