@@ -16,7 +16,7 @@ final class SearchManager: NSObject, MKLocalSearchCompleterDelegate {
     var places: [Place] = []
     
     private let completer = MKLocalSearchCompleter()
-    private var resolveTask: Task<Void, Never>?
+    private var queryID: Int = 0
     
     override init() {
         super.init()
@@ -33,30 +33,31 @@ final class SearchManager: NSObject, MKLocalSearchCompleterDelegate {
         completer.queryFragment = query
     }
     
-    private func resolveCompletions(_ completions: [MKLocalSearchCompletion]) {
-        resolveTask?.cancel()
-        
-        resolveTask = Task {
+    private func resolveCompletions(_ completions: [MKLocalSearchCompletion], for queryID: Int) {
+        Task {
             var resolved: [Place] = []
-            
             for completion in completions.prefix(10) {
-                if Task.isCancelled { return }
-                
+                // If a newer query started, silently stop
+                guard queryID == self.queryID else { return }
                 do {
                     let request = MKLocalSearch.Request(completion: completion)
                     let response = try await MKLocalSearch(request: request).start()
-                    resolved.append(contentsOf: response.mapItems.map { Place(item: $0) })
+                    resolved.append(
+                        contentsOf: response.mapItems.map { Place(item: $0) }
+                    )
                 } catch {
                     continue
                 }
             }
-            
+            // Final guard before publishing
+            guard queryID == self.queryID else { return }
             places = resolved
         }
     }
     
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        resolveCompletions(completer.results)
+        let currentQueryID = queryID
+        resolveCompletions(completer.results, for: currentQueryID)
     }
     
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
