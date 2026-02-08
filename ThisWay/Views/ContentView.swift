@@ -16,9 +16,7 @@ struct ContentView: View {
     
     @State private var query = ""
     @State private var selectedPlace: Place? = nil
-    
-    @State private var searchTask: Task<Void, Never>? = nil
-    
+
     var body: some View {
         NavigationStack {
             Group {
@@ -37,21 +35,6 @@ struct ContentView: View {
             }
             .navigationTitle("Search places")
             .searchable(text: $query, prompt: "Search for a place")
-            .onChange(of: query) {
-                searchTask?.cancel()
-                searchTask = Task {
-                    try? await Task.sleep(for: .milliseconds(350))
-                    let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
-                    guard
-                        trimmed.count > 3,
-                        let userLocation = router.location()
-                    else {
-                        searcher.places = []
-                        return
-                    }
-                    searcher.update(query: trimmed, near: userLocation)
-                }
-            }
         }
         .environment(router)
         .task {
@@ -59,6 +42,18 @@ struct ContentView: View {
           //  query = "Bunkamura Orchard Hall Shinjuku"
           //  query = "Tokyo station"
           //  query = "Nihonbashi"
+        }
+        .task(id: query) {
+            try? await Task.sleep(for: .milliseconds(300))
+            let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard
+                trimmed.count > 3,
+                let location = router.location()
+            else {
+                searcher.places = []
+                return
+            }
+            searcher.update(query: trimmed, near: location)
         }
     }
 }
