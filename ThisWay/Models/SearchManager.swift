@@ -9,7 +9,6 @@ import SwiftUI
 import Foundation
 
 
-@MainActor
 @Observable
 final class SearchManager: NSObject, MKLocalSearchCompleterDelegate {
     
