@@ -20,6 +20,8 @@ struct DirectionView: View {
     
     @State private var cameraPosition: MapCameraPosition = .automatic
     @State private var lastCameraLocation: CLLocation?
+
+    @State private var lastVoiceTriggerLocation: CLLocation?
     
     var body: some View {
         VStack {
@@ -57,17 +59,9 @@ struct DirectionView: View {
         }
         .onChange(of: router.locator.location) {
             router.updateRoute()
-            if let userPos = router.location() {
-                handleLocationUpdate(userPos)
-                // voice instructions
-                if let last = lastCameraLocation {
-                    let distance = userPos.distance(from: last)
-                    if distance >= 8 {
-                        updateVoiceNavi()
-                    }
-                }
-                lastCameraLocation = userPos
-            }
+            guard let userPos = router.location() else { return }
+            handleLocationUpdate(userPos)
+            handleVoiceNavigation(userPos)
         }
         .task {
             router.tgtLocation = place.item.location
@@ -94,10 +88,21 @@ struct DirectionView: View {
         cameraPosition = .camera(camera)
     }
     
+    private func handleVoiceNavigation(_ location: CLLocation) {
+        if let last = lastVoiceTriggerLocation {
+            let distance = location.distance(from: last)
+            guard distance >= 15 else { return }
+            updateVoiceNavi()
+            lastVoiceTriggerLocation = location
+        } else {
+            lastVoiceTriggerLocation = location
+        }
+    }
+    
     private func handleLocationUpdate(_ location: CLLocation) {
         if let last = lastCameraLocation {
             let distance = location.distance(from: last)
-            guard distance >= 8 else {
+            guard distance >= 15 else {
                 return
             }
         }
