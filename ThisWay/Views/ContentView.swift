@@ -41,7 +41,7 @@ struct ContentView: View {
         .task {
             router.locator.requestPermissionAndLocation()
           //  query = "Bunkamura Orchard Hall Shinjuku"
-            query = "Tokyo station"
+          //  query = "Tokyo station"
           //  query = "Nihonbashi"
         }
         .task(id: query) {
