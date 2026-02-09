@@ -86,18 +86,22 @@ enum Instruction: Equatable {
     case right
     case near
     case arrived
-
-    var speechText: String {
+    
+    var localizationKey: String.LocalizationValue {
         switch self {
-            case .keepStraight: String(localized: "GO_STRAIGHT")
-            case .slightLeft: String(localized: "TURN_SLIGHT_LEFT")
-            case .left: String(localized: "TURN_LEFT")
-            case .slightRight: String(localized: "TURN_SLIGHT_RIGHT")
-            case .right: String(localized: "TURN_RIGHT")
-            case .near: String(localized: "NEAR")
-            case .arrived: String(localized: "ARRIVED")
+        case .keepStraight: return "GO_STRAIGHT"
+        case .slightLeft:   return "TURN_SLIGHT_LEFT"
+        case .left:         return "TURN_LEFT"
+        case .slightRight:  return "TURN_SLIGHT_RIGHT"
+        case .right:        return "TURN_RIGHT"
+        case .near:         return "NEAR"
+        case .arrived:      return "ARRIVED"
         }
     }
-
+    
+    var speechText: String {
+        String(localized: localizationKey)
+    }
+    
 }
 
