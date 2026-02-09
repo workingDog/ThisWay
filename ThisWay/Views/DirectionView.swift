@@ -66,6 +66,7 @@ struct DirectionView: View {
                         updateVoiceNavi()
                     }
                 }
+                lastCameraLocation = userPos
             }
         }
         .task {
