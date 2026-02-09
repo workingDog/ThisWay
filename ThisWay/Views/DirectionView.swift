@@ -102,7 +102,7 @@ struct DirectionView: View {
     private func handleLocationUpdate(_ location: CLLocation) {
         if let last = lastCameraLocation {
             let distance = location.distance(from: last)
-            guard distance >= 15 else {
+            guard distance >= 10 else {
                 return
             }
         }
