@@ -18,6 +18,43 @@
         }
       }
     },
+    "Cancel" : {
+
+    },
+    "FOR_HOME" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For home"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "家庭用"
+          }
+        }
+      }
+    },
+    "GO_HOME" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go home"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帰宅する"
+          }
+        }
+      }
+    },
     "GO_STRAIGHT" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -68,6 +105,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "検索した場所"
+          }
+        }
+      }
+    },
+    "SET_LOCATION" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set Location"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "場所を設定"
           }
         }
       }

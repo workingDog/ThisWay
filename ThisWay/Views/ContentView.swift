@@ -5,8 +5,9 @@
 //  Created by Ringo Wathelet on 2026/02/06.
 //
 import SwiftUI
-import MapKit
 import CoreLocation
+import MapKit
+
 
 
 struct ContentView: View {
@@ -16,8 +17,11 @@ struct ContentView: View {
     @State private var searcher = SearchManager()
     
     @State private var query = ""
-    @State private var selectedPlace: Place? = nil
-
+    @State private var selectedPlace: Place?
+    
+    @State private var showMenu = false
+    @State private var homePlace: Place?
+    
     var body: some View {
         NavigationStack {
             Group {
@@ -28,6 +32,28 @@ struct ContentView: View {
                             .onTapGesture {
                                 selectedPlace = place
                             }
+
+                        // long press → popup menu
+                        .simultaneousGesture(
+                            LongPressGesture(minimumDuration: 0.5)
+                                .onEnded { _ in
+                                    homePlace = place
+                                    showMenu = true
+                                }
+                        )
+                        .confirmationDialog(
+                            "SET_LOCATION",
+                            isPresented: $showMenu,
+                            titleVisibility: Visibility.visible
+                        ) {
+                            Button("FOR_HOME", systemImage: "house.fill") {
+                                if let place = homePlace {
+                                    HomeLocation.current = place.item.location.coordinate
+                                }
+                            }
+                            Button("Cancel", role: .cancel) {}
+                        }
+
                     }
                 }
             }
@@ -42,7 +68,7 @@ struct ContentView: View {
             router.locator.requestPermissionAndLocation()
           //  query = "Bunkamura Orchard Hall Shinjuku"
           //  query = "Tokyo station"
-          //  query = "Nihonbashi"
+          //  query = "Suitengumae"
         }
         .task(id: query) {
             let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)

@@ -29,6 +29,14 @@ struct DirectionView: View {
             
             Text(RouteManager.asString(router.remainingDistance))
             
+            Button("GO_HOME") {
+                if let home = HomeLocation.current {
+                    let location = CLLocation(latitude: home.latitude, longitude: home.longitude)
+                    router.tgtLocation = location
+                    router.getRoute()
+                }
+            }.buttonStyle(.bordered).padding(5)
+            
             Map(position: $cameraPosition) {
                 MapPolyline(router.route.polyline).stroke(.blue, lineWidth: 4)
                 if let location = router.locator.location {
