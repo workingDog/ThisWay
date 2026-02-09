@@ -15,7 +15,7 @@ struct DirectionView: View {
     let place: Place
     
     @State private var speechOn: Bool = false
-    @State private var voiceNav = VoiceNavigator()
+    @State private var voiceNavi = VoiceNavigator()
     @State private var lastNavHeading: Double?
     
     @State private var cameraPosition: MapCameraPosition = .automatic
@@ -59,7 +59,7 @@ struct DirectionView: View {
             router.updateRoute()
             if let userPos = router.location() {
                 handleLocationUpdate(userPos)
-                // speech instructions
+                // voice instructions
                 if let last = lastCameraLocation {
                     let distance = userPos.distance(from: last)
                     if distance >= 8 {
@@ -75,12 +75,12 @@ struct DirectionView: View {
         }
     }
     
-    func angleDelta(_ a: Double, _ b: Double) -> Double {
+    private func angleDelta(_ a: Double, _ b: Double) -> Double {
         let diff = abs(a - b).truncatingRemainder(dividingBy: 360)
         return min(diff, 360 - diff)
     }
     
-    func updateCameraHeading() {
+    private func updateCameraHeading() {
         guard let userLocation = router.location() else { return }
         
         let camera = MapCamera(
@@ -93,7 +93,7 @@ struct DirectionView: View {
         cameraPosition = .camera(camera)
     }
     
-    func handleLocationUpdate(_ location: CLLocation) {
+    private func handleLocationUpdate(_ location: CLLocation) {
         if let last = lastCameraLocation {
             let distance = location.distance(from: last)
             guard distance >= 8 else {
@@ -111,9 +111,9 @@ struct DirectionView: View {
         return Double.greatestFiniteMagnitude
     }
     
-    func updateVoiceNavi() {
+    private func updateVoiceNavi() {
         if speechOn {
-            voiceNav.updateNavigation(angle: (router.routeBearing - router.locator.headingDegrees), distance: crowDistance())
+            voiceNavi.updateNavigation(angle: (router.routeBearing - router.locator.headingDegrees), distance: crowDistance())
         }
     }
     

@@ -13,7 +13,7 @@ import MapKit
 @Observable
 final class RouteManager {
     
-    // user location
+    // service for user location 
     let locator = LocationService()
     // target location
     var tgtLocation: CLLocation?
@@ -25,6 +25,7 @@ final class RouteManager {
     
     init() { }
     
+    // convenience
     func location() -> CLLocation? {
         locator.location
     }
@@ -74,7 +75,7 @@ final class RouteManager {
         }
     }
 
-    func closestPolylineIndex(to location: CLLocationCoordinate2D, in polyline: MKPolyline) -> Int {
+    private func closestPolylineIndex(to location: CLLocationCoordinate2D, in polyline: MKPolyline) -> Int {
         
         let userPoint = MKMapPoint(location)
         let points = polyline.points()
@@ -98,7 +99,7 @@ final class RouteManager {
         updateRemainingDistance()
     }
     
-    func updateRouteBearing() {
+    private func updateRouteBearing() {
         guard let location = locator.location else { return }
 
         let polyline = route.polyline
@@ -114,7 +115,7 @@ final class RouteManager {
         routeBearing = bearing(from: start, to: end)
     }
     
-    func updateRemainingDistance() {
+    private func updateRemainingDistance() {
         guard let location = locator.location else { return }
 
         let polyline = route.polyline

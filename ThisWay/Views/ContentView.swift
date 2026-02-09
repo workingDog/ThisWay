@@ -33,7 +33,7 @@ struct ContentView: View {
             .navigationDestination(item: $selectedPlace) { place in
                 DirectionView(place: place)
             }
-            .navigationTitle("Search places")
+            .navigationTitle("Searched places")
             .searchable(text: $query, prompt: "Search for a place")
         }
         .environment(router)
@@ -44,7 +44,6 @@ struct ContentView: View {
           //  query = "Nihonbashi"
         }
         .task(id: query) {
-            try? await Task.sleep(for: .milliseconds(300))
             let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
             guard
                 trimmed.count > 3,
@@ -53,6 +52,7 @@ struct ContentView: View {
                 searcher.places = []
                 return
             }
+            try? await Task.sleep(for: .milliseconds(300))
             searcher.update(query: trimmed, near: location)
         }
     }
