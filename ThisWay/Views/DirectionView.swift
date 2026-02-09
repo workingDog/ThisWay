@@ -29,8 +29,7 @@ struct DirectionView: View {
             HStack {
                 HStack(spacing: 12) {
                     Text("VOICE_DIRECTIONS")
-                    Toggle("", isOn: $speechOn)
-                        .labelsHidden()
+                    Toggle("", isOn: $speechOn).labelsHidden()
                 }
                 Spacer()
                 Button {
