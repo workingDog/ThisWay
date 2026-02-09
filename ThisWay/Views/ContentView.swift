@@ -10,6 +10,7 @@ import CoreLocation
 
 
 struct ContentView: View {
+    let language = Locale.preferredLanguages.first ?? "en"
     
     @State private var router = RouteManager()
     @State private var searcher = SearchManager()
@@ -33,7 +34,7 @@ struct ContentView: View {
             .navigationDestination(item: $selectedPlace) { place in
                 DirectionView(place: place)
             }
-            .navigationTitle("Searched places")
+            .navigationTitle(String(localized: "SEARCHED_PLACES")) 
             .searchable(text: $query, prompt: "Search for a place")
         }
         .environment(router)

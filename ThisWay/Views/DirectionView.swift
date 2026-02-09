@@ -25,7 +25,7 @@ struct DirectionView: View {
     
     var body: some View {
         VStack {
-            Toggle("Voice directions", isOn: $speechOn).padding(5)
+            Toggle(String(localized: "VOICE_DIRECTIONS"), isOn: $speechOn).padding(5)
             
             Text(RouteManager.asString(router.remainingDistance))
             
