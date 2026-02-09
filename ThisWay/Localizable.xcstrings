@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     "ARRIVED" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -180,13 +183,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Voice directions"
+            "value" : "Voice"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "音声案内"
+            "state" : "needs_review",
+            "value" : "声"
           }
         }
       }

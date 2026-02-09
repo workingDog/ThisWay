@@ -25,17 +25,27 @@ struct DirectionView: View {
     
     var body: some View {
         VStack {
-            Toggle("VOICE_DIRECTIONS", isOn: $speechOn).padding(5)
+            
+            HStack {
+                HStack(spacing: 12) {
+                    Text("VOICE_DIRECTIONS")
+                    Toggle("", isOn: $speechOn)
+                        .labelsHidden()
+                }
+                Spacer()
+                Button {
+                    if let home = HomeLocation.current {
+                        let location = CLLocation(latitude: home.latitude, longitude: home.longitude)
+                        router.tgtLocation = location
+                        router.getRoute()
+                    }
+                } label: {
+                    Image(systemName: "house.fill")
+                }.padding(.horizontal, 10)
+            }
+            .padding(10)
             
             Text(RouteManager.asString(router.remainingDistance))
-            
-            Button("GO_HOME") {
-                if let home = HomeLocation.current {
-                    let location = CLLocation(latitude: home.latitude, longitude: home.longitude)
-                    router.tgtLocation = location
-                    router.getRoute()
-                }
-            }.buttonStyle(.bordered).padding(5)
             
             Map(position: $cameraPosition) {
                 MapPolyline(router.route.polyline).stroke(.blue, lineWidth: 4)
