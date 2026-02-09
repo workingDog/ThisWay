@@ -19,8 +19,6 @@ struct ContentView: View {
     @State private var query = ""
     @State private var selectedPlace: Place?
     
-    @State private var showMenu = false
-    @State private var homePlace: Place?
     
     var body: some View {
         NavigationStack {
@@ -32,28 +30,13 @@ struct ContentView: View {
                             .onTapGesture {
                                 selectedPlace = place
                             }
-
-                        // long press → popup menu
-                        .simultaneousGesture(
-                            LongPressGesture(minimumDuration: 0.5)
-                                .onEnded { _ in
-                                    homePlace = place
-                                    showMenu = true
-                                }
-                        )
-                        .confirmationDialog(
-                            "SET_LOCATION",
-                            isPresented: $showMenu,
-                            titleVisibility: Visibility.visible
-                        ) {
-                            Button("FOR_HOME", systemImage: "house.fill") {
-                                if let place = homePlace {
+                            .contextMenu {
+                                Button {
                                     HomeLocation.current = place.item.location.coordinate
+                                } label: {
+                                    Label("SET_HOME", systemImage: "house.fill")
                                 }
                             }
-                            Button("Cancel", role: .cancel) {}
-                        }
-
                     }
                 }
             }

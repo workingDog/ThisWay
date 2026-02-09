@@ -18,26 +18,6 @@
         }
       }
     },
-    "Cancel" : {
-
-    },
-    "FOR_HOME" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "For home"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "家庭用"
-          }
-        }
-      }
-    },
     "GO_HOME" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -109,19 +89,19 @@
         }
       }
     },
-    "SET_LOCATION" : {
+    "SET_HOME" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Set Location"
+            "value" : "Set home"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "場所を設定"
+            "value" : "ホームを設定"
           }
         }
       }
