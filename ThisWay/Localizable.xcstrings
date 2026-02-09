@@ -95,13 +95,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Set home"
+            "value" : "Set current location as home"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "ホームを設定"
+            "state" : "needs_review",
+            "value" : "現在の位置をホームに設定"
           }
         }
       }

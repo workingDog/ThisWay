@@ -18,8 +18,8 @@ struct ContentView: View {
     
     @State private var query = ""
     @State private var selectedPlace: Place?
-    
-    
+    @State private var showSettings = false
+
     var body: some View {
         NavigationStack {
             Group {
@@ -30,21 +30,26 @@ struct ContentView: View {
                             .onTapGesture {
                                 selectedPlace = place
                             }
-                            .contextMenu {
-                                Button {
-                                    HomeLocation.current = place.item.location.coordinate
-                                } label: {
-                                    Label("SET_HOME", systemImage: "house.fill")
-                                }
-                            }
                     }
                 }
             }
             .navigationDestination(item: $selectedPlace) { place in
                 DirectionView(place: place)
             }
-            .navigationTitle("SEARCHED_PLACES") 
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showSettings = true
+                    } label: {
+                        Image(systemName: "gear")
+                    }
+                }
+            }
+            .navigationTitle("SEARCHED_PLACES")
             .searchable(text: $query, prompt: "Search for a place")
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView().environment(router)
         }
         .environment(router)
         .task {
