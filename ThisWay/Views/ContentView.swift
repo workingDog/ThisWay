@@ -34,14 +34,14 @@ struct ContentView: View {
             .navigationDestination(item: $selectedPlace) { place in
                 DirectionView(place: place)
             }
-            .navigationTitle(String(localized: "SEARCHED_PLACES")) 
+            .navigationTitle("SEARCHED_PLACES") 
             .searchable(text: $query, prompt: "Search for a place")
         }
         .environment(router)
         .task {
             router.locator.requestPermissionAndLocation()
           //  query = "Bunkamura Orchard Hall Shinjuku"
-          //  query = "Tokyo station"
+            query = "Tokyo station"
           //  query = "Nihonbashi"
         }
         .task(id: query) {
