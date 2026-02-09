@@ -24,7 +24,6 @@ final class VoiceNavigator {
     var lastInstruction: Instruction?
     var lastAngle: Double?                    // degrees
     
-    
     func updateNavigation(angle: Double, distance: Double) {
         let angleNorm = normalizeAngle( -angle )
         if let lastAngle, abs(angleNorm - lastAngle) < 10 {
@@ -90,14 +89,15 @@ enum Instruction: Equatable {
 
     var speechText: String {
         switch self {
-            case .keepStraight: "Keep going straight."
-            case .slightLeft: "Turn slightly left."
-            case .left: "Turn left."
-            case .slightRight: "Turn slightly right."
-            case .right: "Turn right."
-            case .near: "Very close to your destination."
-            case .arrived: "You have arrived."
+            case .keepStraight: String(localized: "GO_STRAIGHT")
+            case .slightLeft: String(localized: "TURN_SLIGHT_LEFT")
+            case .left: String(localized: "TURN_LEFT")
+            case .slightRight: String(localized: "TURN_SLIGHT_RIGHT")
+            case .right: String(localized: "TURN_RIGHT")
+            case .near: String(localized: "NEAR")
+            case .arrived: String(localized: "ARRIVED")
         }
     }
+
 }
 
