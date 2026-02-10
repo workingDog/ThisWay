@@ -91,13 +91,13 @@ enum Instruction: Equatable {
     
     var localizationKey: String.LocalizationValue {
         switch self {
-        case .keepStraight: return "GO_STRAIGHT"
-        case .slightLeft:   return "TURN_SLIGHT_LEFT"
-        case .left:         return "TURN_LEFT"
-        case .slightRight:  return "TURN_SLIGHT_RIGHT"
-        case .right:        return "TURN_RIGHT"
-        case .near:         return "NEAR"
-        case .arrived:      return "ARRIVED"
+            case .keepStraight: return "GO_STRAIGHT"
+            case .slightLeft:   return "TURN_SLIGHT_LEFT"
+            case .left:         return "TURN_LEFT"
+            case .slightRight:  return "TURN_SLIGHT_RIGHT"
+            case .right:        return "TURN_RIGHT"
+            case .near:         return "NEAR"
+            case .arrived:      return "ARRIVED"
         }
     }
     

@@ -54,14 +54,11 @@ struct ContentView: View {
         .environment(router)
         .task {
             router.locator.requestPermissionAndLocation()
-          //  query = "Bunkamura Orchard Hall Shinjuku"
-          //  query = "Tokyo station"
-          //  query = "Suitengumae"
         }
         .task(id: query) {
             let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
             guard
-                trimmed.count > 3,
+                trimmed.count >= 3,
                 let location = router.location()
             else {
                 searcher.places = []
