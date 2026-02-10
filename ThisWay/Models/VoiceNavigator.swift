@@ -24,6 +24,8 @@ final class VoiceNavigator {
     var lastInstruction: Instruction?
     var lastAngle: Double?                    // degrees
     
+    init() { }
+    
     func updateNavigation(angle: Double, distance: Double) {
         let angleNorm = normalizeAngle( -angle )
         if let lastAngle, abs(angleNorm - lastAngle) < 10 {
@@ -102,6 +104,5 @@ enum Instruction: Equatable {
     var speechText: String {
         String(localized: localizationKey)
     }
-    
 }
 
