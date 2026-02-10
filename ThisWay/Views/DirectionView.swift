@@ -25,32 +25,7 @@ struct DirectionView: View {
     
     var body: some View {
         VStack {
-            
-            HStack {
-                HStack(spacing: 12) {
-                    Text("VOICE_DIRECTIONS")
-                    Toggle("", isOn: $speechOn).labelsHidden()
-                }
-                Spacer()
-
-                // just for fun
-                LookAroundButton(coordinate: router.location()?.coordinate).padding(10)
-                
-                Spacer()
-                Button {
-                    if let home = HomeLocation.current {
-                        let location = CLLocation(latitude: home.latitude, longitude: home.longitude)
-                        router.tgtLocation = location
-                        router.getRoute()
-                    }
-                } label: {
-                    Image(systemName: "house.fill")
-                }.padding(.horizontal, 10)
-            }
-            .padding(10)
-            
             Text(RouteManager.asString(router.remainingDistance))
-
             Map(position: $cameraPosition) {
                 MapPolyline(router.route.polyline).stroke(.blue, lineWidth: 4)
                 if let location = router.locator.location {
@@ -65,6 +40,30 @@ struct DirectionView: View {
                 }
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                Toggle("VOICE_DIRECTIONS", isOn: $speechOn).tint(.accentColor)
+            }
+            
+            ToolbarItem(placement: .automatic) {
+                HStack {
+                    // just for fun
+                    LookAroundButton(coordinate: router.location()?.coordinate).padding(10)
+
+                    Button {
+                        if let home = HomeLocation.current {
+                            let location = CLLocation(latitude: home.latitude, longitude: home.longitude)
+                            router.tgtLocation = location
+                            router.getRoute()
+                        }
+                    } label: {
+                        Image(systemName: "house.fill")
+                    }.padding(.horizontal, 10)
+                }
+                .padding(10)
+            }
+        }
+        
         .onChange(of: router.routeBearing) {
             updateCameraHeading()
         }
