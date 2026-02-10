@@ -11,17 +11,16 @@ import CoreLocation
 
 struct DirectionView: View {
     @Environment(RouteManager.self) var router
-    
+
     let place: Place
     
     @State private var speechOn: Bool = false
     @State private var voiceNavi = VoiceNavigator()
     @State private var lastNavHeading: Double?
-    
     @State private var cameraPosition: MapCameraPosition = .automatic
     @State private var lastCameraLocation: CLLocation?
-
     @State private var lastVoiceTriggerLocation: CLLocation?
+
     
     var body: some View {
         VStack {
@@ -31,6 +30,10 @@ struct DirectionView: View {
                     Text("VOICE_DIRECTIONS")
                     Toggle("", isOn: $speechOn).labelsHidden()
                 }
+                Spacer()
+                
+                LookAroundButton(coordinate: router.location()?.coordinate ).padding(10)
+                
                 Spacer()
                 Button {
                     if let home = HomeLocation.current {
@@ -45,7 +48,7 @@ struct DirectionView: View {
             .padding(10)
             
             Text(RouteManager.asString(router.remainingDistance))
-            
+
             Map(position: $cameraPosition) {
                 MapPolyline(router.route.polyline).stroke(.blue, lineWidth: 4)
                 if let location = router.locator.location {
@@ -86,7 +89,7 @@ struct DirectionView: View {
             updateCameraHeading()
         }
     }
-    
+
     private func angleDelta(_ a: Double, _ b: Double) -> Double {
         let diff = abs(a - b).truncatingRemainder(dividingBy: 360)
         return min(diff, 360 - diff)
@@ -137,5 +140,5 @@ struct DirectionView: View {
             voiceNavi.updateNavigation(angle: (router.routeBearing - router.locator.headingDegrees), distance: crowDistance())
         }
     }
-    
+  
 }
