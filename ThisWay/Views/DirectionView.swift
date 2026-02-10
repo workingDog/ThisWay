@@ -33,6 +33,7 @@ struct DirectionView: View {
                 }
                 Spacer()
 
+                // just for fun
                 LookAroundButton(coordinate: router.location()?.coordinate).padding(10)
                 
                 Spacer()
