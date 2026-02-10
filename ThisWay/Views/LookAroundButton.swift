@@ -34,8 +34,7 @@ struct LookAroundButton: View {
             if let scene {
                 LookAroundView(scene: scene)
             } else {
-                Text("No Look Around available nearby")
-                    .padding()
+                Text("NO_LOOK").padding()
             }
         }
     }

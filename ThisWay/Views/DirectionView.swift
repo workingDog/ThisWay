@@ -14,10 +14,11 @@ struct DirectionView: View {
 
     let place: Place
     
-    @State private var speechOn: Bool = false
     @State private var voiceNavi = VoiceNavigator()
-    @State private var lastNavHeading: Double?
+    @State private var speechOn: Bool = false
     @State private var cameraPosition: MapCameraPosition = .automatic
+    
+    @State private var lastNavHeading: Double?
     @State private var lastCameraLocation: CLLocation?
     @State private var lastVoiceTriggerLocation: CLLocation?
 
@@ -31,8 +32,8 @@ struct DirectionView: View {
                     Toggle("", isOn: $speechOn).labelsHidden()
                 }
                 Spacer()
-                
-                LookAroundButton(coordinate: router.location()?.coordinate ).padding(10)
+
+                LookAroundButton(coordinate: router.location()?.coordinate).padding(10)
                 
                 Spacer()
                 Button {

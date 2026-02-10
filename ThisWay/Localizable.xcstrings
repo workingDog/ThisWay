@@ -72,8 +72,22 @@
         }
       }
     },
-    "No Look Around available nearby" : {
-
+    "NO_LOOK" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Look Around available"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "周辺状況確認不可"
+          }
+        }
+      }
     },
     "Search for a place" : {
 
