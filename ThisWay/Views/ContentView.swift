@@ -51,7 +51,6 @@ struct ContentView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView()
                 .presentationDetents([.medium])
-                .environment(router)
         }
         .environment(router)
         .task {
