@@ -193,23 +193,6 @@
           }
         }
       }
-    },
-    "VOICE_DIRECTIONS" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voice"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "声"
-          }
-        }
-      }
     }
   },
   "version" : "1.1"

@@ -9,6 +9,7 @@ import MapKit
 import CoreLocation
 
 
+
 struct DirectionView: View {
     @Environment(RouteManager.self) var router
 
@@ -42,7 +43,13 @@ struct DirectionView: View {
         }
         .toolbar {
             ToolbarItem(placement: .automatic) {
-                Toggle("VOICE_DIRECTIONS", isOn: $speechOn).tint(.accentColor)
+                Button {
+                    speechOn.toggle()
+                } label: {
+                    Image(systemName: "speaker.wave.3.fill")
+                }
+                .tint(speechOn ? .accentColor : .primary)
+                .padding(.horizontal, 10)
             }
             
             ToolbarItem(placement: .automatic) {
