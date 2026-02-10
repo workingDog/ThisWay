@@ -49,14 +49,12 @@ struct DirectionView: View {
                     Image(systemName: "speaker.wave.3.fill")
                 }
                 .tint(speechOn ? .accentColor : .primary)
-                .padding(.horizontal, 10)
             }
             
             ToolbarItem(placement: .automatic) {
                 HStack {
                     // just for fun
                     LookAroundButton(coordinate: router.location()?.coordinate).padding(10)
-
                     Button {
                         if let home = HomeLocation.current {
                             let location = CLLocation(latitude: home.latitude, longitude: home.longitude)
@@ -65,9 +63,8 @@ struct DirectionView: View {
                         }
                     } label: {
                         Image(systemName: "house.fill")
-                    }.padding(.horizontal, 10)
+                    }
                 }
-                .padding(10)
             }
         }
         
