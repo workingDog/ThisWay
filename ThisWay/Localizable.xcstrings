@@ -98,13 +98,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Searched places"
+            "value" : "Places"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "検索した場所"
+            "value" : "場所"
           }
         }
       }
