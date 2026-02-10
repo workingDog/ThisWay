@@ -8,9 +8,7 @@ import SwiftUI
 import MapKit
 
 
-
 struct LookAroundButton: View {
-
     let coordinate: CLLocationCoordinate2D?
     
     @State private var scene: MKLookAroundScene?
@@ -30,15 +28,9 @@ struct LookAroundButton: View {
             }
         }
         .disabled(isLoading)
-        .sheet(isPresented: $showingLookAround) {
-            if let scene {
-                LookAroundView(scene: scene)
-            } else {
-                Text("NO_LOOK").padding()
-            }
-        }
+        .lookAroundViewer(isPresented: $showingLookAround, initialScene: scene)
     }
-
+    
     private func loadLookAroundScene() async {
         isLoading = true
         defer { isLoading = false }
@@ -48,7 +40,7 @@ struct LookAroundButton: View {
             showingLookAround = true
         } else {
             scene = nil
-            showingLookAround = true // shows fallback text
+            showingLookAround = true
         }
     }
 
@@ -69,14 +61,5 @@ struct LookAroundButton: View {
         }
 
         return nil
-    }
-}
-
-struct LookAroundView: View {
-    let scene: MKLookAroundScene
-
-    var body: some View {
-        LookAroundPreview(scene: .constant(scene))
-            .ignoresSafeArea()
     }
 }
