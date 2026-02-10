@@ -49,7 +49,9 @@ struct ContentView: View {
             .searchable(text: $query, prompt: "Search for a place")
         }
         .sheet(isPresented: $showSettings) {
-            SettingsView().environment(router)
+            SettingsView()
+                .presentationDetents([.medium])
+                .environment(router)
         }
         .environment(router)
         .task {
