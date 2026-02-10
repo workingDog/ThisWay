@@ -1,6 +1,6 @@
 //
 //  ThisWayApp.swift
-//  MyWay
+//  ThisWay
 //
 //  Created by Ringo Wathelet on 2026/02/06.
 //

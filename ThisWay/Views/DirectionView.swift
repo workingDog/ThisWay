@@ -1,6 +1,6 @@
 //
 //  DirectionView.swift
-//  ThisWayApp
+//  ThisWay
 //
 //  Created by Ringo Wathelet on 2026/02/06.
 //
@@ -67,7 +67,6 @@ struct DirectionView: View {
                 }
             }
         }
-        
         .onChange(of: router.routeBearing) {
             updateCameraHeading()
         }
@@ -102,14 +101,12 @@ struct DirectionView: View {
     
     private func updateCameraHeading() {
         guard let userLocation = router.location() else { return }
-        
         let camera = MapCamera(
             centerCoordinate: userLocation.coordinate,
             distance: 1000,              // walking zoom
             heading: router.routeBearing,
             pitch: 0
         )
-        
         cameraPosition = .camera(camera)
     }
     
