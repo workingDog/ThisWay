@@ -27,7 +27,7 @@ final class VoiceNavigator {
     init() { }
     
     func updateNavigation(angle: Double, distance: Double) {
-        let angleNorm = normalizeAngle( -angle )
+        let angleNorm = normalizeAngle( angle )
         if let lastAngle, abs(angleNorm - lastAngle) < 10 {
             return
         }
