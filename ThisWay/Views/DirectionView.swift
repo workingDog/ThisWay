@@ -9,10 +9,9 @@ import MapKit
 import CoreLocation
 
 
-
 struct DirectionView: View {
     @Environment(RouteManager.self) var router
-
+    
     let place: Place
     
     @State private var voiceNavi = VoiceNavigator()
@@ -22,8 +21,8 @@ struct DirectionView: View {
     @State private var lastNavHeading: Double?
     @State private var lastCameraLocation: CLLocation?
     @State private var lastVoiceTriggerLocation: CLLocation?
-
     
+
     var body: some View {
         VStack {
             Text(RouteManager.asString(router.remainingDistance))
@@ -31,12 +30,14 @@ struct DirectionView: View {
                 MapPolyline(router.route.polyline).stroke(.blue, lineWidth: 4)
                 if let location = router.locator.location {
                     Annotation("", coordinate: location.coordinate) {
-                        Image("arrow")
+                        Image(systemName: "location.north.circle")
                             .resizable()
-                            .frame(width: 80, height: 80)
                             .rotationEffect(
                                 .degrees(router.routeBearing - router.locator.headingDegrees)
                             )
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(.red, .red)
+                            .font(.system(size: 60))
                     }
                 }
             }
@@ -76,7 +77,7 @@ struct DirectionView: View {
                 updateVoiceNavi()
                 return
             }
-            if angleDelta(router.locator.headingDegrees, last) >= 15 {
+            if angleDelta(router.locator.headingDegrees, last) >= 20 {
                 lastNavHeading = router.locator.headingDegrees
                 updateVoiceNavi()
             }
@@ -90,7 +91,40 @@ struct DirectionView: View {
         .task {
             router.tgtLocation = place.item.location
             router.getRoute()
-            updateCameraHeading()
+            updateCameraHeading() 
+        }
+    }
+
+    private func handleVoiceNavigation(_ location: CLLocation) {
+        if let last = lastVoiceTriggerLocation {
+            let distance = location.distance(from: last)
+            guard distance >= 20 else { return }
+            updateVoiceNavi()
+            lastVoiceTriggerLocation = location
+        } else {
+            lastVoiceTriggerLocation = location
+        }
+    }
+    
+    private func handleLocationUpdate(_ location: CLLocation) {
+        if let last = lastCameraLocation {
+            let distance = location.distance(from: last)
+            guard distance >= 5 else { return }
+        }
+        lastCameraLocation = location
+        updateCameraHeading()
+    }
+    
+    private func crowDistance() -> Double {
+        if let userPos = router.location(), let tgtLocation = router.tgtLocation {
+            return userPos.distance(from: tgtLocation)
+        }
+        return Double.greatestFiniteMagnitude
+    }
+    
+    private func updateVoiceNavi() {
+        if speechOn {
+            voiceNavi.updateNavigation(angle: (router.routeBearing - router.locator.headingDegrees), distance: crowDistance())
         }
     }
 
@@ -110,37 +144,4 @@ struct DirectionView: View {
         cameraPosition = .camera(camera)
     }
     
-    private func handleVoiceNavigation(_ location: CLLocation) {
-        if let last = lastVoiceTriggerLocation {
-            let distance = location.distance(from: last)
-            guard distance >= 15 else { return }
-            updateVoiceNavi()
-            lastVoiceTriggerLocation = location
-        } else {
-            lastVoiceTriggerLocation = location
-        }
-    }
-    
-    private func handleLocationUpdate(_ location: CLLocation) {
-        if let last = lastCameraLocation {
-            let distance = location.distance(from: last)
-            guard distance >= 10 else { return }
-        }
-        lastCameraLocation = location
-        updateCameraHeading()
-    }
-    
-    private func crowDistance() -> Double {
-        if let userPos = router.location(), let tgtLocation = router.tgtLocation {
-            return userPos.distance(from: tgtLocation)
-        }
-        return Double.greatestFiniteMagnitude
-    }
-    
-    private func updateVoiceNavi() {
-        if speechOn {
-            voiceNavi.updateNavigation(angle: (router.routeBearing - router.locator.headingDegrees), distance: crowDistance())
-        }
-    }
-  
 }
