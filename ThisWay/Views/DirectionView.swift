@@ -137,7 +137,7 @@ struct DirectionView: View {
         guard let userLocation = router.location() else { return }
         let camera = MapCamera(
             centerCoordinate: userLocation.coordinate,
-            distance: 1000,              // walking zoom
+            distance: 300,              // walking zoom
             heading: router.routeBearing,
             pitch: 0
         )
