@@ -22,10 +22,24 @@ struct DirectionView: View {
     @State private var lastCameraLocation: CLLocation?
     @State private var lastVoiceTriggerLocation: CLLocation?
     
+    @State private var simOn: Bool = false
 
     var body: some View {
         VStack {
             Text(RouteManager.asString(router.remainingDistance))
+            
+//            Button("Start/stop Sim") {
+//                simOn.toggle()
+//                if simOn {
+//                    if let current = router.locator.location {
+//                      //  router.locator.startSimulation(from: current.coordinate)
+//                        router.locator.startRouteSimulation(route: router.route, speed: 3.0)
+//                    }
+//                } else {
+//                    router.locator.stopSimulation()
+//                }
+//            }.buttonStyle(.bordered)
+            
             Map(position: $cameraPosition) {
                 MapPolyline(router.route.polyline).stroke(.blue, lineWidth: 4)
                 if let location = router.locator.location {
