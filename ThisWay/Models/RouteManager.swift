@@ -103,18 +103,26 @@ final class RouteManager {
         guard let location = locator.location else { return }
 
         let polyline = route.polyline
+        let pointCount = polyline.pointCount
+        
+        // Ensure we have enough points
+        guard pointCount > 1 else { return }
+
         let points = polyline.points()
 
-        let index = closestPolylineIndex(to: location.coordinate, in: polyline)
+        var index = closestPolylineIndex(to: location.coordinate, in: polyline)
 
-        let aheadIndex = min(index + 3, polyline.pointCount - 1)
+        // Clamp index safely into valid range
+        index = max(0, min(index, pointCount - 1))
+
+        let aheadIndex = min(index + 3, pointCount - 1)
 
         let start = location.coordinate
         let end = points[aheadIndex].coordinate
 
         routeBearing = bearing(from: start, to: end)
     }
-    
+
     private func updateRemainingDistance() {
         guard let location = locator.location else { return }
 
