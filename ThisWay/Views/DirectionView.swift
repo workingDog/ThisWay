@@ -17,7 +17,9 @@ struct DirectionView: View {
     @State private var voiceNavi = VoiceNavigator()
     @State private var speechOn: Bool = false
     
-    @State private var cameraPosition: MapCameraPosition = .automatic
+    @State private var cameraPosition: MapCameraPosition = .camera(
+        MapCamera(centerCoordinate: .init(latitude: 0, longitude: 0), distance: 1000, heading: 0, pitch: 0))
+        //.automatic
      
     @State private var lastNavHeading: Double?
     @State private var lastCameraLocation: CLLocation?
@@ -106,7 +108,14 @@ struct DirectionView: View {
         .task {
             router.tgtLocation = place.item.location
             router.getRoute()
-            updateCameraHeading() 
+            if let userLocation = router.location() {
+                cameraPosition = .camera(
+                    MapCamera(
+                        centerCoordinate: userLocation.coordinate,
+                        distance: 1000, heading: 0, pitch: 0)
+                )
+            }
+            updateCameraHeading()
         }
     }
 
@@ -147,15 +156,16 @@ struct DirectionView: View {
         let diff = abs(a - b).truncatingRemainder(dividingBy: 360)
         return min(diff, 360 - diff)
     }
-    
+
     private func updateCameraHeading() {
-        guard let userLocation = router.location() else { return }
+        guard let userLocation = router.location(),
+              let currentCamera = cameraPosition.camera else { return }
 
         let newCamera = MapCamera(
             centerCoordinate: userLocation.coordinate,
-            distance: cameraPosition.camera?.distance ?? 1000,
+            distance: currentCamera.distance,
             heading: router.routeBearing,
-            pitch: cameraPosition.camera?.pitch ?? 0
+            pitch: currentCamera.pitch
         )
 
         cameraPosition = .camera(newCamera)
