@@ -56,7 +56,8 @@ final class RouteManager {
     func getRoute() {
         if let userLoc = locator.location, let tgtLoc = tgtLocation {
             
-            let source = MKMapItem(location: userLoc, address: nil)
+            let source = MKMapItem.forCurrentLocation() // more precise
+   //         let source = MKMapItem(location: userLoc, address: nil)
             let destination = MKMapItem(location: tgtLoc, address: nil)
             
             let request = MKDirections.Request()
