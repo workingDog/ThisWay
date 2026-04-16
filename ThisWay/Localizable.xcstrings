@@ -93,7 +93,14 @@
       }
     },
     "Search distance %lld km" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検索距離 %lld km"
+          }
+        }
+      }
     },
     "Search for a place" : {
 
