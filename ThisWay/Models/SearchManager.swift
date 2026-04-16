@@ -10,7 +10,47 @@ import Foundation
 
 
 @Observable
-final class SearchManager: NSObject, MKLocalSearchCompleterDelegate {
+final class SearchManager {
+    
+    var places: [Place] = []
+    
+    private let completer = MKLocalSearchCompleter()
+    private var queryID: Int = 0
+    
+    private let router: RouteManager  
+    
+    init(router: RouteManager) {
+        self.router = router
+    }
+    
+    func update(query: String, near location: CLLocation) async {
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = query
+        request.region = MKCoordinateRegion(
+            center: location.coordinate,
+            latitudinalMeters: router.searchRange * 1000.0,
+            longitudinalMeters: router.searchRange * 1000.0
+        )
+        let search = MKLocalSearch(request: request)
+        do {
+            let response = try await search.start()
+            let results = response.mapItems.map { Place(item: $0) }
+            await MainActor.run {
+                self.places = results
+            }
+        } catch {
+            print("Search error:", error)
+            
+            await MainActor.run {
+                self.places = []
+            }
+        }
+    }
+}
+
+/*
+@Observable
+final class SearchManager2: NSObject, MKLocalSearchCompleterDelegate {
     
     var places: [Place] = []
     
@@ -64,3 +104,4 @@ final class SearchManager: NSObject, MKLocalSearchCompleterDelegate {
     }
     
 }
+*/

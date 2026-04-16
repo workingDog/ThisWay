@@ -4,6 +4,9 @@
     "" : {
 
     },
+    "%lld km" : {
+
+    },
     "ARRIVED" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -88,6 +91,9 @@
           }
         }
       }
+    },
+    "Search distance %lld km" : {
+
     },
     "Search for a place" : {
 

@@ -14,11 +14,19 @@ struct ContentView: View {
     let language = Locale.preferredLanguages.first ?? "en"
     
     @State private var router = RouteManager()
-    @State private var searcher = SearchManager()
+    @State private var searcher: SearchManager
     
     @State private var query = ""
     @State private var selectedPlace: Place?
     @State private var showSettings = false
+    
+    @State private var searchTask: Task<Void, Never>?
+    
+    init() {
+        let router = RouteManager()
+        _router = State(initialValue: router)
+        _searcher = State(initialValue: SearchManager(router: router))
+    }
 
     var body: some View {
         NavigationStack {
@@ -43,31 +51,75 @@ struct ContentView: View {
                     } label: {
                         Image(systemName: "gear")
                     }
+                    .tint(.accentColor)
                 }
             }
             .navigationTitle("SEARCHED_PLACES")
             .searchable(text: $query, prompt: "Search for a place")
+            .onSubmit(of: .search) {
+                let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+                guard
+                    trimmed.count >= 3,
+                    let location = router.location()
+                else {
+                    searcher.places = []
+                    return
+                }
+                Task {
+                    await searcher.update(query: trimmed, near: location)
+                }
+            }
         }
         .sheet(isPresented: $showSettings) {
             SettingsView()
+                .environment(router)
                 .presentationDetents([.medium])
         }
         .environment(router)
         .task {
             router.locator.requestPermissionAndLocation()
         }
-        .task(id: query) {
-            let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard
-                trimmed.count >= 3,
-                let location = router.location()
-            else {
-                searcher.places = []
-                return
+        .onChange(of: query) {
+            // cancel previous request immediately
+            searchTask?.cancel()
+            
+            searchTask = Task {
+                let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                guard trimmed.count >= 3,
+                      let location = router.location()
+                else {
+                    await MainActor.run {
+                        searcher.places = []
+                    }
+                    return
+                }
+                
+                // ⏱ debounce (wait for user to pause typing)
+                try? await Task.sleep(for: .milliseconds(500))
+                
+                // if user typed again → this task is obsolete
+                guard !Task.isCancelled else { return }
+                
+                await searcher.update(query: trimmed, near: location)
             }
-            try? await Task.sleep(for: .milliseconds(300))
-            searcher.update(query: trimmed, near: location)
         }
+        
+        // too many requests to the API
+//        .task(id: query) {
+//            let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+//            guard
+//                trimmed.count >= 3,
+//                let location = router.location()
+//            else {
+//                searcher.places = []
+//                return
+//            }
+//            print("---> query: \(trimmed)")
+//            try? await Task.sleep(for: .milliseconds(300))
+//            searcher.update(query: trimmed, near: location)
+//        }
+        
     }
 }
 

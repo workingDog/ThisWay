@@ -21,6 +21,8 @@ final class RouteManager {
     var route = MKRoute()
     var routeBearing: CLLocationDegrees = .zero
     var remainingDistance: Double = 0
+    
+    var searchRange: Double = 20.0
 
     
     init() { }
@@ -57,7 +59,6 @@ final class RouteManager {
         if let userLoc = locator.location, let tgtLoc = tgtLocation {
             
             let source = MKMapItem.forCurrentLocation() // more precise
-   //         let source = MKMapItem(location: userLoc, address: nil)
             let destination = MKMapItem(location: tgtLoc, address: nil)
             
             let request = MKDirections.Request()
