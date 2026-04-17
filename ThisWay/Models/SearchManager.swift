@@ -9,6 +9,7 @@ import SwiftUI
 import Foundation
 
 
+@MainActor
 @Observable
 final class SearchManager {
     
@@ -34,16 +35,10 @@ final class SearchManager {
         let search = MKLocalSearch(request: request)
         do {
             let response = try await search.start()
-            let results = response.mapItems.map { Place(item: $0) }
-            await MainActor.run {
-                self.places = results
-            }
+            self.places = response.mapItems.map { Place(item: $0) }
         } catch {
             print("Search error:", error)
-            
-            await MainActor.run {
-                self.places = []
-            }
+            self.places = []
         }
     }
 }
